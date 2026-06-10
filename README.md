@@ -49,11 +49,17 @@ npx expo start -w
 ```
 Client runs on `http://localhost:8081`.
 
-### 3. (Optional) Expose server via tunnel for n8n callback
-```bash
-cloudflared tunnel --protocol http2 --url http://localhost:3000
-```
-Copy the `*.trycloudflare.com` URL and set it as the callback in your n8n HTTP Request node.
+## n8n Workflow Setup
+
+1. Go to your n8n instance
+2. Click **"Add workflow"** → **"Import from file"**
+3. Select `n8n-workflow.json` from the repo root
+4. Click the **HTTP Request** node → update the URL to your 
+   local server's `/mock-notify` endpoint (use `cloudflared tunnel --protocol http2 --url http://localhost:3000` 
+   if running locally)
+5. Click **Activate** (top right toggle)
+6. Copy the Production webhook URL and set it as:
+   `N8N_WEBHOOK_URL` in your server environment
 
 ---
 

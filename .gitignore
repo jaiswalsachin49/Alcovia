@@ -1,0 +1,18 @@
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Expo / React Native
+client/.expo/
+client/dist/
+client/web-build/
+
+# Server
+server/dist/
+server/data/database.sqlite
+server/data/database.sqlite-wal
+server/data/database.sqlite-shm
+
+# OS
+.DS_Store

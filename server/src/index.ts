@@ -49,8 +49,8 @@ app.post('/sync', (req, res) => {
         `).run(task.taskId, task.subjectId, task.chapterId, task.title, task.status, task.lamportClock, task.deviceId, task.deleted ? 1 : 0);
       } else {
         // Compare clocks
-        if (task.lamportClock > existing.lamportClock || 
-           (task.lamportClock === existing.lamportClock && task.deviceId > existing.deviceId)) {
+        if (task.lamportClock > existing.lamportClock ||
+          (task.lamportClock === existing.lamportClock && task.deviceId > existing.deviceId)) {
           db.prepare(`
             UPDATE tasks
             SET status = ?, lamportClock = ?, deviceId = ?, deleted = ?
@@ -74,7 +74,7 @@ app.post('/sync', (req, res) => {
 
   try {
     syncTx();
-    
+
     // Process unprocessed successful sessions after sync transaction
     const unprocessedSessions = db.prepare(`
       SELECT * FROM sessions 
@@ -88,11 +88,11 @@ app.post('/sync', (req, res) => {
         // Award rewards
         const currentState = db.prepare('SELECT * FROM student_state WHERE studentId = ?').get(s.studentId) as any;
         const today = new Date().toISOString().split('T')[0];
-        
+
         let newStreak = currentState.streak;
         if (currentState.lastStreakDate !== today) {
-           // Basic streak logic: just +1 for today if not already updated today.
-           newStreak += 1;
+          // Basic streak logic: just +1 for today if not already updated today.
+          newStreak += 1;
         }
 
         db.prepare(`
@@ -152,17 +152,25 @@ async function triggerN8nWebhook(session: any) {
   // In a real app, this URL points to the n8n webhook URL.
   // For the assignment, n8n will make a callback to /mock-notify.
   // Using an environment variable or default
-  const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL || 'http://localhost:5678/webhook/alcovia-focus';
-  
+  const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL || 'https://sachin49.app.n8n.cloud/webhook-test/session-complete';
+
   try {
+    const currentState = db.prepare('SELECT * FROM student_state WHERE studentId = ?').get(session.studentId) as any;
+
     const response = await fetch(n8nWebhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(session)
+      body: JSON.stringify({
+        sessionId: session.sessionId,
+        studentId: session.studentId,
+        duration: session.targetDuration,
+        streak: currentState?.streak ?? 0,
+        coins: currentState?.coins ?? 0
+      })
     });
-    console.log(`Fired webhook for session ${session.sessionId}, status: ${response.status}`);
+    console.log(`n8n webhook fired for session ${session.sessionId}, status: ${response.status}`);
   } catch (error) {
-    console.error(`Failed to fire webhook for session ${session.sessionId}:`, error);
+    console.error(`n8n webhook failed for session ${session.sessionId}:`, error);
   }
 }
 

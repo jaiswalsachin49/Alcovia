@@ -13,6 +13,7 @@ server/dist/
 server/data/database.sqlite
 server/data/database.sqlite-wal
 server/data/database.sqlite-shm
+server/.env
 
 # OS
 .DS_Store

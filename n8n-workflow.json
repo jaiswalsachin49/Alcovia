@@ -1,0 +1,152 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "session-complete",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1f8256a3-29bb-44a4-89f9-fa965812c79c",
+      "name": "Webhook",
+      "webhookId": "88340eb2-3fbd-4494-b084-1e92b080732f"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7622257c-f27a-4b8d-a763-43d427e13909",
+              "leftValue": "={{ $workflow.staticData.processedSessions?.includes($json.body.sessionId) }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "52214307-fda4-4b0d-a0e3-ef21371e627a",
+      "name": "If"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        416,
+        -96
+      ],
+      "id": "be0d6861-794e-41a4-bf3b-ed33bb6183c0",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://aware-chevy-guns-consultant.trycloudflare.com/mock-notify",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n       \"sessionId\": \"={{ $json.body.sessionId }}\",\n       \"message\": \"Streak now {{ $json.body.streak }} days, +{{ $json.body.coins }} coins.\",\n       \"studentId\": \"={{ $json.body.studentId }}\"\n     }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        416,
+        96
+      ],
+      "id": "28db7534-6319-4cda-ade0-bcd73962a2a1",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "const sessionId = $('Webhook').first().json.body.sessionId;\n\n// Get or initialize the processed sessions list\nconst staticData = $getWorkflowStaticData('global');\nif (!staticData.processedSessions) {\n  staticData.processedSessions = [];\n}\n\n// Store the sessionId\nstaticData.processedSessions.push(sessionId);\n\nreturn $input.all();\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        624,
+        96
+      ],
+      "id": "2be61545-0fe6-4ba7-9378-94b53d371ac4",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "41d1cf77-637b-407e-9fe2-a2e7ce7a5a0a",
+  "meta": {
+    "instanceId": "0846fa72cf25aaf3913286d5fd422637f8a70e500273cf5e9c0687e0ccad3f7b"
+  },
+  "nodeGroups": [],
+  "id": "sFgebG5T0OE9DJTg",
+  "tags": []
+}

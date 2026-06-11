@@ -65,10 +65,25 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://aware-chevy-guns-consultant.trycloudflare.com/mock-notify",
+        "url": "https://YOUR_CLOUDFLARE_TUNNEL_URL/mock-notify",
         "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n       \"sessionId\": \"={{ $json.body.sessionId }}\",\n       \"message\": \"Streak now {{ $json.body.streak }} days, +{{ $json.body.coins }} coins.\",\n       \"studentId\": \"={{ $json.body.studentId }}\"\n     }",
+        "specifyBody": "keypair",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "sessionId",
+              "value": "={{ $json.body.sessionId }}"
+            },
+            {
+              "name": "message",
+              "value": "=Streak now {{ $json.body.streak }} days, +{{ $json.body.coins }} coins."
+            },
+            {
+              "name": "studentId",
+              "value": "={{ $json.body.studentId }}"
+            }
+          ]
+        },
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -137,7 +152,7 @@
       ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate"

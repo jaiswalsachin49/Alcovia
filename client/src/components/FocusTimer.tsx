@@ -132,10 +132,7 @@ const styles = StyleSheet.create({
     borderRadius: 24, 
     padding: 24,
     marginBottom: 24, 
-    shadowColor: '#6366f1', 
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.1, 
-    shadowRadius: 24,
+    boxShadow: '0px 8px 24px rgba(99, 102, 241, 0.1)',
     elevation: 5,
     borderWidth: 1,
     borderColor: '#e2e8f0'
@@ -185,10 +182,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 16,
     alignItems: 'center',
-    shadowColor: '#6366f1',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    boxShadow: '0px 4px 8px rgba(99, 102, 241, 0.3)',
   },
   primaryBtnText: {
     color: '#ffffff',

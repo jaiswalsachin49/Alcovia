@@ -125,7 +125,11 @@ export const useStore = create<AppState>((set, get) => ({
       get().forceLocalSave();
 
     } catch (error: any) {
-      console.error(error);
+      if (error.message === 'Failed to fetch') {
+        console.warn('Sync failed: Server unreachable (is the backend running?). You can toggle "Offline Mode" in the Dev Panel to stop auto-sync polling.');
+      } else {
+        console.error(error);
+      }
       set({ syncError: error.message });
     } finally {
       set({ isSyncing: false });

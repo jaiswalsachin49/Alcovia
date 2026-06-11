@@ -106,10 +106,7 @@ const styles = StyleSheet.create({
     borderRadius: 24, 
     padding: 24,
     marginBottom: 24, 
-    shadowColor: '#8b5cf6', 
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.1, 
-    shadowRadius: 24,
+    boxShadow: '0px 8px 24px rgba(139, 92, 246, 0.1)',
     elevation: 5,
     borderWidth: 1,
     borderColor: '#e2e8f0'
@@ -205,10 +202,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#e2e8f0',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.02,
-    shadowRadius: 2,
+    boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.02)',
   },
   taskIcon: {
     marginRight: 12

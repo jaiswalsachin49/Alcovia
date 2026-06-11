@@ -5,6 +5,7 @@
       "parameters": {
         "httpMethod": "POST",
         "path": "session-complete",
+        "responseMode": "lastNode",
         "options": {}
       },
       "type": "n8n-nodes-base.webhook",
@@ -19,78 +20,18 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          },
-          "conditions": [
-            {
-              "id": "7622257c-f27a-4b8d-a763-43d427e13909",
-              "leftValue": "={{ $workflow.staticData.processedSessions?.includes($json.body.sessionId) }}",
-              "rightValue": "true",
-              "operator": {
-                "type": "string",
-                "operation": "equals",
-                "name": "filter.operator.equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.3,
-      "position": [
-        208,
-        0
-      ],
-      "id": "52214307-fda4-4b0d-a0e3-ef21371e627a",
-      "name": "If"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
-      "position": [
-        416,
-        -96
-      ],
-      "id": "be0d6861-794e-41a4-bf3b-ed33bb6183c0",
-      "name": "No Operation, do nothing"
-    },
-    {
-      "parameters": {
         "method": "POST",
-        "url": "https://YOUR_CLOUDFLARE_TUNNEL_URL/mock-notify",
+        "url": "https://layers-mods-announces-header.trycloudflare.com/mock-notify",
         "sendBody": true,
-        "specifyBody": "keypair",
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "sessionId",
-              "value": "={{ $json.body.sessionId }}"
-            },
-            {
-              "name": "message",
-              "value": "=Streak now {{ $json.body.streak }} days, +{{ $json.body.coins }} coins."
-            },
-            {
-              "name": "studentId",
-              "value": "={{ $json.body.studentId }}"
-            }
-          ]
-        },
+        "specifyBody": "json",
+        "jsonBody": "={\n       \"sessionId\": \"={{ $json.body.sessionId }}\",\n       \"message\": \"Streak now {{ $json.body.streak }} days, +{{ $json.body.coins }} coins.\",\n       \"studentId\": \"={{ $json.body.studentId }}\"\n     }",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        416,
-        96
+        496,
+        0
       ],
       "id": "28db7534-6319-4cda-ade0-bcd73962a2a1",
       "name": "HTTP Request"
@@ -102,8 +43,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        624,
-        96
+        832,
+        0
       ],
       "id": "2be61545-0fe6-4ba7-9378-94b53d371ac4",
       "name": "Code in JavaScript"
@@ -113,24 +54,6 @@
   "connections": {
     "Webhook": {
       "main": [
-        [
-          {
-            "node": "If",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "If": {
-      "main": [
-        [
-          {
-            "node": "No Operation, do nothing",
-            "type": "main",
-            "index": 0
-          }
-        ],
         [
           {
             "node": "HTTP Request",
@@ -155,9 +78,10 @@
   "active": true,
   "settings": {
     "executionOrder": "v1",
-    "binaryMode": "separate"
+    "binaryMode": "separate",
+    "availableInMCP": false
   },
-  "versionId": "41d1cf77-637b-407e-9fe2-a2e7ce7a5a0a",
+  "versionId": "aa999aa6-eea0-4946-a89c-c2253a82c3f3",
   "meta": {
     "instanceId": "0846fa72cf25aaf3913286d5fd422637f8a70e500273cf5e9c0687e0ccad3f7b"
   },

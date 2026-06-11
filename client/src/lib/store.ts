@@ -77,7 +77,7 @@ export const useStore = create<AppState>((set, get) => ({
       const deviceId = getDeviceId();
       const state = get();
       
-      const unsyncedSessions = state.sessions.filter(s => !s.syncedToServer);
+      const allSessions = state.sessions; // Send all sessions so Force Sync re-triggers n8n (n8n If node handles dedup)
       const allTasks = state.tasks; 
       
       const res = await fetch('http://localhost:3000/sync', {
@@ -87,7 +87,7 @@ export const useStore = create<AppState>((set, get) => ({
           deviceId,
           changes: {
             tasks: allTasks,
-            sessions: unsyncedSessions
+            sessions: allSessions
           }
         })
       });

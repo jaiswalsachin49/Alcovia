@@ -11,7 +11,7 @@ export function FocusTimer() {
   const completeSession = useStore(state => state.completeSession);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: any;
     if (isRunning && timeLeft > 0) {
       interval = setInterval(() => {
         setTimeLeft(prev => prev - 1);
